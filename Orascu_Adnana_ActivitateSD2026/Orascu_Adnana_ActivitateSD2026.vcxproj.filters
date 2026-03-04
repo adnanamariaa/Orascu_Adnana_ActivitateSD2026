@@ -18,5 +18,22 @@
     <ClCompile Include="Seminar01.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Seminar03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Laborator01.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Laborator02.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Laborator03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="masini.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

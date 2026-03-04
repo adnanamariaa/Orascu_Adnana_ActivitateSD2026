@@ -123,7 +123,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Laborator01.c" />
+    <ClCompile Include="Laborator02.c" />
+    <ClCompile Include="Laborator03.c" />
     <ClCompile Include="Seminar01.c" />
+    <ClCompile Include="Seminar03.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="masini.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
