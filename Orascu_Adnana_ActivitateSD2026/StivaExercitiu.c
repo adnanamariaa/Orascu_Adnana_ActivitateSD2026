@@ -29,12 +29,6 @@ Moneda initializare(const char* taraEmitenta, int valoare, float greutate, int a
 
 	return m;
 }
-void afisareMoneda(Moneda m) {
-	printf("Tara emitenta: %s\n", m.taraEmitenta);
-	printf("Valoare nominala: %d\n", m.valoare);
-	printf("Greutate: %.2f\n", m.greutate);
-	printf("An emitere: %d\n\n", m.anEmitere);
-}
 
 void adaugareStiva(Nod** cap, Moneda m) {
 	Nod* nou = malloc(sizeof(Nod));
@@ -42,6 +36,43 @@ void adaugareStiva(Nod** cap, Moneda m) {
 	nou->info = m;
 	*cap = nou;
 }
+
+Moneda citireMonedaDinFisier(FILE* f) {
+	Moneda m;
+	char buffer[50];
+	char sep[3] = ",\n";
+	fgets(buffer, 50, f);
+
+	char* taraEmitenta = strtok(buffer, sep);
+	m.taraEmitenta = malloc(strlen(taraEmitenta) + 1);
+	strcpy(m.taraEmitenta, taraEmitenta);
+
+	m.valoare = atoi(strtok(NULL, sep));
+	m.greutate = atof(strtok(NULL, sep));
+	m.anEmitere = atoi(strtok(NULL, sep));
+
+	return m;
+}
+
+void citireListaMonedeFisier(const char* numeFisier, Nod** cap) {
+
+	FILE* f = fopen(numeFisier, "r");
+	if (f) {
+		while (!feof(f)) {
+			adaugareStiva(cap, citireMonedaDinFisier(f));
+		}
+		fclose(f);
+	}
+}
+
+void afisareMoneda(Moneda m) {
+	printf("Tara emitenta: %s\n", m.taraEmitenta);
+	printf("Valoare nominala: %d\n", m.valoare);
+	printf("Greutate: %.2f\n", m.greutate);
+	printf("An emitere: %d\n\n", m.anEmitere);
+}
+
+
 
 void afisareStiva(Nod* cap) {
 	while (cap) {
@@ -162,25 +193,42 @@ void stergePrimaMonedaDupaValoare(Nod** cap, int valoare) {
 			aux = aux->next;
 		}
 	}
+}
 
-
+void dezalocareStiva(Nod** cap) {
+	Nod* aux = *cap;
+	while (aux) {
+		Nod* deSters = aux;
+		aux = aux->next;
+		if (deSters->info.taraEmitenta)
+			free(deSters->info.taraEmitenta);
+		free(deSters);
+	}
+	*cap = NULL;
 }
 
 int main() {
 
-	Moneda m1 = initializare("Romania", 5, 1.2, 2020);
+	//Stiva cu elemente hardcodate
+	/*Moneda m1 = initializare("Romania", 5, 1.2, 2020);
 	Moneda m2 = initializare("Bulgaria", 3, 1.3, 2007);
 	Moneda m3 = initializare("Grecia", 10, 0.9, 2018);
 	Moneda m4 = initializare("Belgia", 4, 1.5, 2019);
-	Moneda m5 = initializare("Romania", 10, 1.3, 2020);
+	Moneda m5 = initializare("Romania", 10, 1.3, 2020);*/
 	//afisareMoneda(m1);
-	Nod* stiva;
-	stiva = NULL;
-	adaugareStiva(&stiva, m1);
+	/*Nod* stiva;
+	stiva = NULL;*/
+	/*adaugareStiva(&stiva, m1);
 	adaugareStiva(&stiva, m2);
 	adaugareStiva(&stiva, m3);
 	adaugareStiva(&stiva, m4);
-	adaugareStiva(&stiva, m5);
+	adaugareStiva(&stiva, m5);*/
+	
+	//Stiva cu elemente citite din fisier
+	Nod* stiva;
+	stiva = NULL;
+
+	citireListaMonedeFisier("monede.txt", &stiva);
 	afisareStiva(stiva);
 
 	Moneda grMax = monedaGreutateMax(stiva);
@@ -200,6 +248,10 @@ int main() {
 	float greutate = 0.9;
 	stergeMonedaDupaGreutate(&stiva, greutate);
 	printf("Afisarea stivei dupa stergerea monedei cu greutatea %.2f este:\n", greutate);
+	afisareStiva(stiva);
+
+	printf("Afisare dupa dezalocare:\n");
+	dezalocareStiva(&stiva);
 	afisareStiva(stiva);
 
 	return 0;
